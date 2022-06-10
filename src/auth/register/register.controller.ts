@@ -8,6 +8,7 @@ import {
 import { RegisterUserDto } from '../dto';
 import { SignInType } from '../enums/signInType';
 import { RegisterService } from './register.service';
+import * as bcrypt from 'bcrypt';
 
 @Controller('register')
 export class RegisterController {
@@ -20,6 +21,7 @@ export class RegisterController {
     if (!SignInType[authMetod.toUpperCase()]) {
       throw new BadRequestException('Invalid auth method');
     }
+    dto.password = await bcrypt.hash(dto.password, 10);
     dto.authMethod = authMetod;
     return await this._registerService.register(dto);
   }
