@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { LoginUserDto } from '../dto/login.dto';
 import { User } from '../entity/user.entity';
 
 @Injectable()
@@ -11,9 +10,9 @@ export class LoginService {
     private _userRepository: Repository<User>,
   ) {}
 
-  async login(dto: LoginUserDto): Promise<User> {
+  async login(email): Promise<User> {
     try {
-      return await this._userRepository.findOneBy({ email: dto.email });
+      return await this._userRepository.findOneBy({ email: email });
     } catch (error) {
       console.log(error);
     }
