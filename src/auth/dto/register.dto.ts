@@ -1,8 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsNotEmpty } from 'class-validator';
-import { UserDto } from 'src/auth/dto/user.dto';
+import { PickType } from '@nestjs/mapped-types';
+import { UserDto } from './user.dto';
 
-export class RegisterUserDto extends PartialType(UserDto) {
-  @IsNotEmpty()
-  password: string;
-}
+export class RegisterUserDto extends PickType(UserDto, [
+  'email',
+  'password',
+  'authMethod',
+  'firstName',
+] as const) {}
