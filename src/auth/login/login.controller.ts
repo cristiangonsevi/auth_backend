@@ -8,6 +8,8 @@ import {
 } from '@nestjs/common';
 import { LoginUserDto } from '../dto/login.dto';
 import { LoginService } from './login.service';
+import * as bcrypt from 'bcrypt';
+import { UserDto } from '../dto';
 
 @Controller('login')
 export class LoginController {
@@ -15,9 +17,13 @@ export class LoginController {
   @Post()
   @HttpCode(200)
   async login(@Body() dto: LoginUserDto): Promise<any> {
-    const user = await this._loginService.login(dto);
+    const user: UserDto = await this._loginService.login(dto.email);
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+    const validPass = bcrypt.compare(dto.password, user.password);
+    if (!validPass) {
+      throw new NotFoundException('Password is incorrect');
     }
     return {
       statusCode: HttpStatus.OK,
