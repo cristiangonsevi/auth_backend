@@ -25,6 +25,7 @@ export class LoginController {
     if (!validPass) {
       throw new NotFoundException('Password is incorrect');
     }
+    delete user.password;
     return {
       statusCode: HttpStatus.OK,
       message: 'Login successful',
