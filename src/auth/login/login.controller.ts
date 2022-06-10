@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Post,
+} from '@nestjs/common';
 import { LoginUserDto } from '../dto/login.dto';
 import { LoginService } from './login.service';
 
@@ -6,7 +13,16 @@ import { LoginService } from './login.service';
 export class LoginController {
   constructor(private readonly _loginService: LoginService) {}
   @Post()
-  login(@Body() dto: LoginUserDto): any {
-    return this._loginService.login(dto);
+  @HttpCode(200)
+  async login(@Body() dto: LoginUserDto): Promise<any> {
+    const user = await this._loginService.login(dto);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Login successful',
+      data: user,
+    };
   }
 }
