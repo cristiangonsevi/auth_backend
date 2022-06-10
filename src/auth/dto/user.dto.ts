@@ -1,8 +1,11 @@
 import {
+  IsBoolean,
+  IsDate,
   IsEmail,
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { SignInType } from '../enums/signInType';
@@ -13,10 +16,21 @@ export class UserDto {
   id: number;
   @IsString()
   @IsNotEmpty()
-  name: string;
+  firstName: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  lastName: string;
   @IsEmail()
   @IsNotEmpty()
   email: string;
+  @IsString()
+  password: string;
   @IsEnum(SignInType)
-  methodAuth: string;
+  @IsOptional()
+  authMethod: string;
+  @IsBoolean()
+  isActive: boolean;
+  @IsDate()
+  createdAt: Date;
 }
