@@ -21,7 +21,7 @@ export class LoginController {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const validPass = bcrypt.compare(dto.password, user.password);
+    const validPass = await bcrypt.compare(dto.password, user.password);
     if (!validPass) {
       throw new NotFoundException('Password is incorrect');
     }
