@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: 'chat',
       entities: [],
       synchronize: true,
+      autoLoadEntities: true,
     }),
   ],
 })
