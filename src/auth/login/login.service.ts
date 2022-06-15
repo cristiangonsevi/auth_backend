@@ -10,9 +10,9 @@ export class LoginService {
     private _userRepository: Repository<User>,
   ) {}
 
-  async login(email): Promise<User> {
+  async login(where: Record<string, unknown>): Promise<User> {
     try {
-      return await this._userRepository.findOneBy({ email: email });
+      return await this._userRepository.findOneBy(where);
     } catch (error) {
       console.log(error);
     }
