@@ -35,7 +35,11 @@ export class RegisterController {
     dto.password = await bcrypt.hash(dto.password, 10);
     dto.authMethod = authMetod;
     // return dto;
-    return await this._registerService.register(dto);
+    await this._registerService.register(dto);
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'User registered successfully',
+    };
   }
   @Post(':authMethod')
   async registerGoogle(
