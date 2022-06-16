@@ -23,4 +23,12 @@ export class RegisterService {
       throw new InternalServerErrorException('Error registering user');
     }
   }
+  async findUserByEmail(email: string): Promise<User> {
+    try {
+      return await this._userRepository.findOne({ where: { email } });
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error registering user');
+    }
+  }
 }
