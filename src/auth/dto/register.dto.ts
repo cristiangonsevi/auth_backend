@@ -1,4 +1,5 @@
 import { PickType } from '@nestjs/mapped-types';
+import { IsOptional, IsString } from 'class-validator';
 import { UserDto } from './user.dto';
 
 export class RegisterUserDto extends PickType(UserDto, [
@@ -6,4 +7,8 @@ export class RegisterUserDto extends PickType(UserDto, [
   'password',
   'authMethod',
   'firstName',
-] as const) {}
+] as const) {
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+}
