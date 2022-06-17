@@ -19,13 +19,17 @@ import { GoogleUserDto, UserDto } from '../dto';
 import { GoogleAuthService } from '../services/google-auth.service';
 import { SignInType } from '../enums/signInType';
 import { GithubAuthService } from '../services/github-auth.service';
+import { RegisterService } from '../register/register.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('login')
 export class LoginController {
   constructor(
     private readonly _loginService: LoginService,
+    private _registerService: RegisterService,
     private _googleAuthService: GoogleAuthService,
     private _githubAuthService: GithubAuthService,
+    private _configService: ConfigService,
   ) {}
   @Post()
   @HttpCode(200)
@@ -88,7 +92,32 @@ export class LoginController {
   }
   @Get('github/callback')
   async loginGithub(@Res() res: any, @Query() params: { code: string }) {
-    this._githubAuthService.verifyUser(params.code);
-    return res.send(`<script>window.close();</script>`);
+    const frontEndHost = this._configService.get('FRONT_END_HOST');
+    let user: UserDto = new UserDto();
+    user = await this._githubAuthService.verifyUser(params.code);
+    const existUser: UserDto = await this._loginService.login({
+      email: user.email,
+    });
+    if (!existUser) {
+      user.password = ':)';
+      user.authMethod = SignInType.GITHUB;
+      const userCreated = await this._registerService.register(user);
+      const response = {
+        statusCode: 200,
+        message: 'User registered successfully',
+        data: userCreated,
+      };
+      return res.redirect(
+        `${frontEndHost}/register?token=${btoa(JSON.stringify(response))}`,
+      );
+    }
+    const response = {
+      statusCode: 200,
+      message: 'Login successful',
+      data: user,
+    };
+    res.redirect(
+      `${frontEndHost}/login?token=${btoa(JSON.stringify(response))}`,
+    );
   }
 }
