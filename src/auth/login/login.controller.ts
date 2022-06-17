@@ -2,12 +2,15 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Param,
   Post,
+  Query,
+  Res,
 } from '@nestjs/common';
 import { LoginUserDto } from '../dto/login.dto';
 import { LoginService } from './login.service';
@@ -15,12 +18,14 @@ import * as bcrypt from 'bcrypt';
 import { GoogleUserDto, UserDto } from '../dto';
 import { GoogleAuthService } from '../services/google-auth.service';
 import { SignInType } from '../enums/signInType';
+import { GithubAuthService } from '../services/github-auth.service';
 
 @Controller('login')
 export class LoginController {
   constructor(
     private readonly _loginService: LoginService,
     private _googleAuthService: GoogleAuthService,
+    private _githubAuthService: GithubAuthService,
   ) {}
   @Post()
   @HttpCode(200)
@@ -80,5 +85,10 @@ export class LoginController {
     };
 
     return authMethod;
+  }
+  @Get('github/callback')
+  async loginGithub(@Res() res: any, @Query() params: { code: string }) {
+    this._githubAuthService.verifyUser(params.code);
+    return res.send(`<script>window.close();</script>`);
   }
 }
