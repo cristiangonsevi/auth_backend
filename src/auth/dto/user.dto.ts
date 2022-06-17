@@ -29,6 +29,9 @@ export class UserDto {
   @IsEnum(SignInType)
   @IsOptional()
   authMethod: string;
+  @IsString()
+  @IsOptional()
+  image: string;
   @IsBoolean()
   isActive: boolean;
   @IsDate()
