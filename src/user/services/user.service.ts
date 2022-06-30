@@ -18,4 +18,12 @@ export class UserService {
       new InternalServerErrorException();
     }
   }
+  async updateUserPassword(password: string, id: number) {
+    try {
+      return await this._userRepository.update(id, { password });
+    } catch (error) {
+      console.log(error);
+      new InternalServerErrorException();
+    }
+  }
 }
