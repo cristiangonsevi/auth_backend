@@ -20,6 +20,10 @@ export class User {
   password: string;
   @Column({ nullable: true })
   image: string;
+  @Column({ nullable: true })
+  bio: string;
+  @Column({ nullable: true })
+  phone: string;
   @Column({ length: 20, default: SignInType.EMAIL })
   authMethod: string;
   @Column({ default: true })
