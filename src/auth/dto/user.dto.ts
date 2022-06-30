@@ -32,6 +32,12 @@ export class UserDto {
   @IsString()
   @IsOptional()
   image: string;
+  @IsString()
+  @IsOptional()
+  bio: string;
+  @IsString()
+  @IsOptional()
+  phone: string;
   @IsBoolean()
   isActive: boolean;
   @IsDate()
