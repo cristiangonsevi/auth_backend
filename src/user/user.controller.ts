@@ -20,6 +20,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { Response } from 'express';
+import { LoginResponseUserDto } from 'src/auth/dto/loginResponse.dto';
 
 @Controller('user')
 export class UserController {
@@ -29,10 +30,12 @@ export class UserController {
     @Body() dto: UpdateUserDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    await this._userService.updateUser(dto, id);
+    const userModified: LoginResponseUserDto =
+      await this._userService.updateUser(dto, id);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated succesfully',
+      data: userModified,
     };
   }
   @Put(':id/password')
