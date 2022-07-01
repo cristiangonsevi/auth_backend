@@ -13,6 +13,14 @@ export class UserService {
     private _userRepository: Repository<User>,
     private _http: HttpService,
   ) {}
+  async findUser(id: number): Promise<User> {
+    try {
+      return await this._userRepository.findOneBy({ id });
+    } catch (error) {
+      console.log(error);
+      new InternalServerErrorException();
+    }
+  }
   async updateUser(
     dto: UpdateUserDto,
     id: number,

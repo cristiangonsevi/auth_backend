@@ -21,6 +21,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { Response } from 'express';
 import { LoginResponseUserDto } from 'src/auth/dto/loginResponse.dto';
+import { unlinkSync } from 'fs';
 
 @Controller('user')
 export class UserController {
@@ -56,7 +57,7 @@ export class UserController {
       storage: diskStorage({
         destination: join(__dirname, '../public/images/users'),
         filename: (req, file, cb) => {
-          const fileName = `${req.params.id}-user`;
+          const fileName = `${req.params.id}-user-${Date.now()}`;
           cb(null, fileName + extname(file.originalname));
         },
       }),
@@ -66,6 +67,11 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @Param('id', ParseIntPipe) id: number,
   ) {
+    const oldPhoto = await this._userService.findUser(id);
+    const oldPathImg = `${join(__dirname, '../public/images/users')}/${
+      oldPhoto.image
+    }`;
+    unlinkSync(oldPathImg);
     await this._userService.updateUserImage(file.filename, id);
     return {
       statusCode: HttpStatus.OK,
