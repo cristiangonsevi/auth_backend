@@ -1,3 +1,4 @@
+import { classToPlain, Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -17,13 +18,22 @@ export class User {
   @Column({ length: 100, unique: true })
   email: string;
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
   @Column({ nullable: true })
   image: string;
+  @Column({ nullable: true })
+  bio: string;
+  @Column({ nullable: true })
+  phone: string;
   @Column({ length: 20, default: SignInType.EMAIL })
   authMethod: string;
   @Column({ default: true })
   isActive: boolean;
   @CreateDateColumn()
+  @Exclude({ toPlainOnly: true })
   createdAt: Date;
+  toJSON() {
+    return classToPlain(this);
+  }
 }
