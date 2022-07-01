@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/auth/entity/user.entity';
 import { UpdateUserDto } from '../dto/updateUser.dto';
 import { HttpService } from '@nestjs/axios';
+import { LoginResponseUserDto } from 'src/auth/dto/loginResponse.dto';
 
 @Injectable()
 export class UserService {
@@ -12,9 +13,13 @@ export class UserService {
     private _userRepository: Repository<User>,
     private _http: HttpService,
   ) {}
-  async updateUser(dto: UpdateUserDto, id: number) {
+  async updateUser(
+    dto: UpdateUserDto,
+    id: number,
+  ): Promise<LoginResponseUserDto> {
     try {
-      return await this._userRepository.update(id, dto);
+      await this._userRepository.update(id, dto);
+      return await this._userRepository.findOneBy({ id });
     } catch (error) {
       console.log(error);
       new InternalServerErrorException();
