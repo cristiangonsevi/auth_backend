@@ -36,9 +36,11 @@ export class RegisterController {
     dto.authMethod = authMetod;
     // return dto;
     await this._registerService.register(dto);
+    const userLogged = await this._registerService.findUserByEmail(dto.email);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'User registered successfully',
+      data: userLogged,
     };
   }
   @Post(':authMethod')
@@ -75,9 +77,11 @@ export class RegisterController {
     }
     user.password = ':)';
     await this._registerService.register(user);
+    const userLogged = await this._registerService.findUserByEmail(user.email);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'User registered successfully',
+      data: userLogged,
     };
   }
 }
