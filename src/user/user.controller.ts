@@ -71,7 +71,11 @@ export class UserController {
     const oldPathImg = `${join(__dirname, '../public/images/users')}/${
       oldPhoto.image
     }`;
-    unlinkSync(oldPathImg);
+    try {
+      unlinkSync(oldPathImg);
+    } catch (err) {
+      console.log(err);
+    }
     await this._userService.updateUserImage(file.filename, id);
     return {
       statusCode: HttpStatus.OK,
