@@ -1,0 +1,36 @@
+name: Deploy to server
+on:
+  pull_request:
+    types:
+      - "closed"
+jobs:
+  build:
+    name: Build
+    runs-on: [self-hosted, prod]
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Create secrects'
+        run: \
+          echo 'tst' >> .env
+          echo 'DATABASE_HOST=${{secrects.DATABASE_HOST}}' >> .env
+          echo 'DATABASE_PORT=${{secrects.DATABASE_PORT}}' >> .env
+          echo 'DATABASE_USER=${{secrects.DATABASE_USER}}' >> .env
+          echo 'DATABASE_PASSWORD=${{secrects.DATABASE_PASSWORD}}' >> .env
+          echo 'DATABASE_NAME=${{secrects.DATABASE_NAME}}' >> .env
+          echo 'PORT=${{secrects.PORT}}' >> .env
+          echo 'GOOGLE_CLIENT_ID=${{secrects.GOOGLE_CLIENT_ID}}' >> .env
+          echo 'GOOGLE_CLIENT_SECRET=${{secrects.GOOGLE_CLIENT_SECRET}}' >> .env
+          echo 'GITHUB_CLIENT_ID=${{secrects.GITHUB_CLIENT_ID}}' >> .env
+          echo 'GITHUB_CLIENT_SECRET=${{secrects.GITHUB_CLIENT_SECRET}}' >> .env
+          echo 'FRONT_END_HOST=${{secrects.FRONT_END_HOST}}' >> .env
+
+      - name: 'Destroy old compose build'
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+      - name: 'Build new compose'
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no---no-cache
+      - name: 'Start new compose'
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+        

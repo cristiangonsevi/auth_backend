@@ -101,7 +101,10 @@ export class LoginController {
     if (!existUser) {
       user.password = ':)';
       user.authMethod = SignInType.GITHUB;
-      const userCreated = await this._registerService.register(user);
+      await this._registerService.register(user);
+      const userCreated = await this._registerService.findUserByEmail(
+        user.email,
+      );
       const response = {
         statusCode: 200,
         message: 'User registered successfully',
