@@ -1,26 +1,17 @@
 version: "3.9"
 services:
-  mysqldb:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_DATABASE=${DATABASE_NAME}
-    ports:
-      - "3307:3306"
-    volumes:
-      - /home/cgonzalez/database/mysql:/var/lib/mysql
-  nestjsbd:
-    depends_on:
-      - database
+  app:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    env_file: ./.env
-    ports:
-      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apichat.rule=Host(`apichat.crisego.com`)"
+      - "traefik.http.routers.apichat.entrypoints=websecure"
+      - "traefik.http.routers.apichat.tls=true"
     environment:
-      - DATABASE_HOST=mysqldb
+      # PORT must be exposed by 80
+      - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_USER=${DATABASE_USER}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
@@ -31,8 +22,13 @@ services:
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - FRONT_END_HOST=${FRONT_END_HOST}
-    stdin_open: true
-    tty: true
+    # ports:
+    #   - "${APP_PORT}"
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - traefik_default
+networks:
+  traefik_default:
+    external: true
