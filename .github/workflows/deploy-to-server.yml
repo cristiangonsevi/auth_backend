@@ -6,22 +6,23 @@ on:
 jobs:
   build:
     name: Build
+    if: github.event.pull_request.merged == true
     runs-on: [self-hosted, prod]
     steps:
       - uses: actions/checkout@v3
       - name: 'Create secrects'
         run: \
-          echo 'DATABASE_HOST=${{secrects.DATABASE_HOST}}' >> .env
-          echo 'DATABASE_PORT=${{secrects.DATABASE_PORT}}' >> .env
-          echo 'DATABASE_USER=${{secrects.DATABASE_USER}}' >> .env
-          echo 'DATABASE_PASSWORD=${{secrects.DATABASE_PASSWORD}}' >> .env
-          echo 'DATABASE_NAME=${{secrects.DATABASE_NAME}}' >> .env
-          echo 'PORT=${{secrects.PORT}}' >> .env
-          echo 'GOOGLE_CLIENT_ID=${{secrects.GOOGLE_CLIENT_ID}}' >> .env
-          echo 'GOOGLE_CLIENT_SECRET=${{secrects.GOOGLE_CLIENT_SECRET}}' >> .env
-          echo 'GITHUB_CLIENT_ID=${{secrects.GITHUB_CLIENT_ID}}' >> .env
-          echo 'GITHUB_CLIENT_SECRET=${{secrects.GITHUB_CLIENT_SECRET}}' >> .env
-          echo 'FRONT_END_HOST=${{secrects.FRONT_END_HOST}}' >> .env
+          echo 'DATABASE_HOST=${{secrets.DATABASE_HOST}}' >> .env
+          echo 'DATABASE_PORT=${{secrets.DATABASE_PORT}}' >> .env
+          echo 'DATABASE_USER=${{secrets.DATABASE_USER}}' >> .env
+          echo 'DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}}' >> .env
+          echo 'DATABASE_NAME=${{secrets.DATABASE_NAME}}' >> .env
+          echo 'PORT=${{secrets.PORT}}' >> .env
+          echo 'GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}' >> .env
+          echo 'GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}}' >> .env
+          echo 'GITHUB_CLIENT_ID=${{secrets.GITHUB_CLIENT_ID}}' >> .env
+          echo 'GITHUB_CLIENT_SECRET=${{secrets.GITHUB_CLIENT_SECRET}}' >> .env
+          echo 'FRONT_END_HOST=${{secrets.FRONT_END_HOST}}' >> .env
 
       - name: 'Destroy old compose build'
         run: |
