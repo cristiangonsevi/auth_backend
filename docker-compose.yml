@@ -3,12 +3,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.apichat.rule=Host(`apichat.crisego.com`)"
       - "traefik.http.routers.apichat.entrypoints=websecure"
       - "traefik.http.routers.apichat.tls=true"
+      - "traefik.http.services.apichat.loadbalancer.server.port=3000"
     environment:
       # PORT must be exposed by 80
       - DATABASE_HOST=${DATABASE_HOST}
