@@ -20,8 +20,8 @@ jobs:
           echo 'PORT=${{secrets.PORT}}' >> .env
           echo 'GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}' >> .env
           echo 'GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}}' >> .env
-          echo 'GITHUB_CLIENT_ID=${{secrets.GITHUB_CLIENT_ID}}' >> .env
-          echo 'GITHUB_CLIENT_SECRET=${{secrets.GITHUB_CLIENT_SECRET}}' >> .env
+          echo 'GITHUB_CLIENT_ID=${{secrets.CLIENT_ID_GITHUB}}' >> .env
+          echo 'GITHUB_CLIENT_SECRET=${{secrets.CLIENT_SECRET_GITHUB}}' >> .env
           echo 'FRONT_END_HOST=${{secrets.FRONT_END_HOST}}' >> .env
 
       - name: 'Destroy old compose build'
