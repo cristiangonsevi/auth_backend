@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+    ports:
+      - "3307:3306"
+    volumes:
+      - /home/cgonzalez/database/mysql:/var/lib/mysql
+  nestjsbd:
+    depends_on:
+      - database
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: ./.env
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_HOST=mysqldb
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - PORT=${PORT}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - FRONT_END_HOST=${FRONT_END_HOST}
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      - /app/node_modules
