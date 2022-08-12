@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 'Create secrects'
-        run: \
+        run: |
           echo 'DATABASE_HOST=${{secrets.DATABASE_HOST}}' >> .env
           echo 'DATABASE_PORT=${{secrets.DATABASE_PORT}}' >> .env
           echo 'DATABASE_USER=${{secrets.DATABASE_USER}}' >> .env
