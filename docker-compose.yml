@@ -28,7 +28,7 @@ services:
       - .:/app
       - /app/node_modules
     networks:
-      - traefik_default
+      - traefik-docker-compose_default
 networks:
-  traefik_default:
+  traefik-docker-compose_default:
     external: true
