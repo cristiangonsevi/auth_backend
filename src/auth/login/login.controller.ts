@@ -118,7 +118,7 @@ export class LoginController {
     const response = {
       statusCode: 200,
       message: 'Login successful',
-      data: user,
+      data: existUser,
     };
     res.redirect(
       `${frontEndHost}/login?token=${btoa(JSON.stringify(response))}`,
