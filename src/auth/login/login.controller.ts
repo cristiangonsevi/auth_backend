@@ -114,6 +114,7 @@ export class LoginController {
         `${frontEndHost}/register?token=${btoa(JSON.stringify(response))}`,
       );
     }
+    user.id = existUser.id;
     const response = {
       statusCode: 200,
       message: 'Login successful',
